@@ -8,7 +8,6 @@ import (
 type Album struct {
 	ID        primitive.ObjectID   `json:"id" bson:"_id"`
 	Name      string               `bson:"name" json:"name"`
-	Images    []primitive.ObjectID `json:"images" bson:"images"`
 	CreatedAt time.Time            `json:"created_at" bson:"created_at"`
 }
 
@@ -28,9 +27,6 @@ type AlbumRepository interface {
 	Find(take, skip int) (*[]Album, error)
 	Exist(id primitive.ObjectID) bool
 	Remove(id primitive.ObjectID) error
-
-	AddImageToAlbum(albumId, imageId primitive.ObjectID) (error)
-	RemoveImageFromAlbum(albumId, imageId primitive.ObjectID) (error)
 }
 
 // Models

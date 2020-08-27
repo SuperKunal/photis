@@ -11,10 +11,11 @@ type imageUsecase struct {
 	imageRepo     domain.ImageRepository
 }
 
-func (i *imageUsecase) UploadImage(file []byte, filename string) (*domain.Image, error) {
+func (i *imageUsecase) UploadImage(file []byte, filename string, albumId primitive.ObjectID) (*domain.Image, error) {
 
 	image := &domain.Image{
 		ID:       primitive.NewObjectID(),
+		AlbumID:  albumId,
 		Binary:   file,
 		FIleName: filename,
 		UploadAt: time.Now().UTC(),
@@ -27,13 +28,13 @@ func (i *imageUsecase) UploadImage(file []byte, filename string) (*domain.Image,
 	return image, nil
 }
 
-func (i *imageUsecase) GetImageByID(id string) (*domain.Image, error) {
-	objectId, err := primitive.ObjectIDFromHex(id)
+func (i *imageUsecase) GetImageByID(albumId primitive.ObjectID, id string) (*domain.Image, error) {
+	imgId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, errors.New("invalid image id")
 	}
 
-	doc , err := i.imageRepo.GetByID(objectId)
+	doc , err := i.imageRepo.GetByID(albumId, imgId)
 
 	if err != nil{
 		return nil, errors.New("not found")
@@ -42,7 +43,7 @@ func (i *imageUsecase) GetImageByID(id string) (*domain.Image, error) {
 	return doc, nil
 }
 
-func (i *imageUsecase) FindImages(ids []primitive.ObjectID, cursor int) (*[]domain.Image, error) {
+func (i *imageUsecase) FindImages(albumId primitive.ObjectID, cursor int) (*[]domain.Image, error) {
 	const pageSize = 10
 
 	take := pageSize
@@ -52,7 +53,7 @@ func (i *imageUsecase) FindImages(ids []primitive.ObjectID, cursor int) (*[]doma
 		skip = pageSize * cursor
 	}
 
-	docs, err := i.imageRepo.Find(take, skip)
+	docs, err := i.imageRepo.Find(albumId, take, skip)
 
 	if err != nil {
 		return nil, errors.New("not found")
@@ -61,20 +62,20 @@ func (i *imageUsecase) FindImages(ids []primitive.ObjectID, cursor int) (*[]doma
 	return docs, nil
 }
 
-func (i *imageUsecase) RemoveImage(id string) (*primitive.ObjectID, error) {
-	objectId, err := primitive.ObjectIDFromHex(id)
+func (i *imageUsecase) RemoveImage(albumId primitive.ObjectID, imgId string) error {
+	objectId, err := primitive.ObjectIDFromHex(imgId)
 	if err != nil {
-		return nil, errors.New("invalid image id")
+		return errors.New("invalid image id")
 	}
 
-	if err = i.imageRepo.Remove(objectId); err != nil {
-		return nil, err
+	if err = i.imageRepo.Remove(albumId, objectId); err != nil {
+		return err
 	}
-	return &objectId, nil
+	return nil
 }
 
-func (i *imageUsecase) RemoveImages(ids []primitive.ObjectID) error {
-	return i.imageRepo.RemoveMany(ids)
+func (i *imageUsecase) RemoveImagesByAlbumID(albumId primitive.ObjectID) error {
+	return i.imageRepo.RemoveManyByAlbumId(albumId)
 }
 
 func NewImageUsecase(r domain.ImageRepository) domain.ImageUsecase {

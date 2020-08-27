@@ -41,10 +41,7 @@ func (handler *ImageHandler) CreateAlbum(ctx *atreugo.RequestCtx) error {
 }
 
 func (handler *ImageHandler) FindAlbums(ctx *atreugo.RequestCtx) error {
-	cursor, err := strconv.Atoi(string(ctx.QueryArgs().Peek("cursor")))
-	if err != nil {
-		return ctx.JSONResponse(map[string]string{"error": "invalid cursor"}, http.StatusBadRequest)
-	}
+	cursor, _ := strconv.Atoi(string(ctx.QueryArgs().Peek("cursor")))
 
 	albums, err := handler.AlbumUsecase.FindAlbums(cursor)
 	if err != nil {

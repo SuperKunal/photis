@@ -41,7 +41,6 @@ func (m *mongoAlbumRepository) Find(take, skip int) (*[]domain.Album, error) {
 	findOptions.Limit = &limit
 	findOptions.Skip = &s
 	findOptions.SetSort(bson.D{{"_id", -1}})
-	findOptions.SetProjection(bson.D{{"images", 0}})
 	cur, err := m.collection.Find(context.TODO(), bson.M{}, &findOptions)
 
 	if err != nil {
@@ -70,24 +69,6 @@ func (m *mongoAlbumRepository) Exist(id primitive.ObjectID) bool {
 
 func (m *mongoAlbumRepository) Remove(id primitive.ObjectID) error {
 	if _, err := m.collection.DeleteOne(context.Background(), bson.M{"_id": id}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (m *mongoAlbumRepository) AddImageToAlbum(albumId, imageId primitive.ObjectID) error {
-	filter := bson.M{"_id": albumId}
-	update := bson.M{"$push": bson.M{"images": imageId}}
-	if err := m.collection.FindOneAndUpdate(context.Background(), filter, update).Err(); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (m *mongoAlbumRepository) RemoveImageFromAlbum(albumId, imageId primitive.ObjectID) error {
-	filter := bson.M{"_id": albumId}
-	update := bson.M{"$pull": bson.M{"images": imageId}}
-	if err := m.collection.FindOneAndUpdate(context.Background(), filter, update).Err(); err != nil {
 		return err
 	}
 	return nil

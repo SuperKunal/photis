@@ -4,12 +4,14 @@ import (
 	"errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"photis/domain"
+	"photis/services"
 	"time"
 )
 
 type albumUsecase struct {
-	albumRepo    domain.AlbumRepository
-	imageUsecase domain.ImageUsecase
+	albumRepo      domain.AlbumRepository
+	imageUsecase   domain.ImageUsecase
+	rabbitMqClient *services.Client
 }
 
 func (uc *albumUsecase) CreateAlbum(name string) (*domain.Album, error) {
@@ -37,7 +39,7 @@ func (uc *albumUsecase) RemoveAlbum(id string) error {
 		return errors.New("invalid album id")
 	}
 
-	if err = uc.imageUsecase.RemoveImages(album.Images); err != nil{
+	if err = uc.imageUsecase.RemoveImagesByAlbumID(album.ID); err != nil{
 		return err
 	}
 
@@ -76,14 +78,12 @@ func (uc *albumUsecase) AddImage(albumId string, file []byte, fileName string) (
 		return nil, errors.New("invalid album id")
 	}
 
-	image, err := uc.imageUsecase.UploadImage(file, fileName)
+	image, err := uc.imageUsecase.UploadImage(file, fileName, objectId)
 	if err != nil {
 		return nil, errors.New("error occurred")
 	}
 
-	if err = uc.albumRepo.AddImageToAlbum(objectId, image.ID); err != nil {
-		return nil, err
-	}
+	go uc.rabbitMqClient.Publish("Image: " + fileName + " received!")
 
 	return image, nil
 }
@@ -98,14 +98,12 @@ func (uc *albumUsecase) RemoveImageById(albumId, imageId string) error {
 		return errors.New("invalid album id")
 	}
 
-	imgId, err := uc.imageUsecase.RemoveImage(imageId)
+	err = uc.imageUsecase.RemoveImage(objectId, imageId)
 	if err != nil {
 		return errors.New("error occurred")
 	}
 
-	if err = uc.albumRepo.RemoveImageFromAlbum(objectId, *imgId); err != nil {
-		return err
-	}
+	go uc.rabbitMqClient.Publish("Image deleted!")
 
 	return nil
 }
@@ -121,7 +119,7 @@ func (uc *albumUsecase) FindImages(albumId string, cursor int) (*[]domain.Image,
 		return nil, errors.New("invalid album id")
 	}
 
-	images, err := uc.imageUsecase.FindImages(album.Images, cursor)
+	images, err := uc.imageUsecase.FindImages(album.ID, cursor)
 	if err != nil {
 		return nil, errors.New("images not found")
 	}
@@ -130,16 +128,16 @@ func (uc *albumUsecase) FindImages(albumId string, cursor int) (*[]domain.Image,
 }
 
 func (uc *albumUsecase) FindImageById(albumId, imageId string) (*domain.Image, error) {
-	objectId, err := primitive.ObjectIDFromHex(albumId)
+	albumObjectId, err := primitive.ObjectIDFromHex(albumId)
 	if err != nil {
 		return nil, errors.New("invalid album id")
 	}
 
-	if !uc.albumRepo.Exist(objectId) {
+	if !uc.albumRepo.Exist(albumObjectId) {
 		return nil, errors.New("invalid album id")
 	}
 
-	image, err := uc.imageUsecase.GetImageByID(imageId)
+	image, err := uc.imageUsecase.GetImageByID(albumObjectId, imageId)
 	if err != nil {
 		return nil, errors.New("image not found")
 	}
@@ -147,6 +145,6 @@ func (uc *albumUsecase) FindImageById(albumId, imageId string) (*domain.Image, e
 	return image, nil
 }
 
-func NewAlbumUsecase(r domain.AlbumRepository, uc domain.ImageUsecase) domain.AlbumUsecase {
-	return &albumUsecase{albumRepo: r, imageUsecase: uc}
+func NewAlbumUsecase(r domain.AlbumRepository, uc domain.ImageUsecase, client *services.Client) domain.AlbumUsecase {
+	return &albumUsecase{albumRepo: r, imageUsecase: uc, rabbitMqClient: client}
 }

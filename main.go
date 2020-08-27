@@ -10,6 +10,7 @@ import (
 	"photis/config"
 	_imgRepository "photis/image/repository/mongo"
 	"photis/middleware"
+	"photis/services"
 
 	_handler "photis/album/delivery/http"
 	_albumUsecase "photis/album/usecase"
@@ -21,12 +22,13 @@ func main() {
 	_middleware := middleware.InitMiddleware()
 
 	databaseClient := InitiateMongoClient(_config.ConnectionString).Database(_config.Database)
+	rabbitMqClient := services.NewRabbitMqClient(_config.RabbitMqAddr, _config.QueueName)
 
 	imgRepo := _imgRepository.NewMongoImageRepository(databaseClient)
 	albumRepo := _albumRepository.NewMongoAlbumRepository(databaseClient)
 
 	imgUsecase := _imgUsecase.NewImageUsecase(imgRepo)
-	albumUsecase := _albumUsecase.NewAlbumUsecase(albumRepo, imgUsecase)
+	albumUsecase := _albumUsecase.NewAlbumUsecase(albumRepo, imgUsecase, rabbitMqClient)
 
 	server := atreugo.New(atreugo.Config{Addr: "0.0.0.0:7000", PanicView: _middleware.PanicHandler})
 	api := server.NewGroupPath("/api")

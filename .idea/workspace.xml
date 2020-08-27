@@ -2,24 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a0cb1018-a81a-427b-8e59-1388267a8098" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/photis.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/album/delivery/http/albumHandler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/album/repository/mongo/albumMongo.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/album/usecase/albumUsecase.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domain/album.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/domain/image.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/repository/mongo/imageMongo.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/usecase/imageUsecase.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/middleware/middleware.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/rabbitMq.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/album/delivery/http/albumHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/album/delivery/http/albumHandler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/album/repository/mongo/albumMongo.go" beforeDir="false" afterPath="$PROJECT_DIR$/album/repository/mongo/albumMongo.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/album/usecase/albumUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/album/usecase/albumUsecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/album.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/album.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/domain/image.go" beforeDir="false" afterPath="$PROJECT_DIR$/domain/image.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/repository/mongo/imageMongo.go" beforeDir="false" afterPath="$PROJECT_DIR$/image/repository/mongo/imageMongo.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image/usecase/imageUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/image/usecase/imageUsecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,41 +108,52 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="170" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1598460999610" />
-    <state width="1493" height="261" key="GridCell.Tab.0.bottom" timestamp="1598465464422">
+    <state width="1493" height="261" key="GridCell.Tab.0.bottom" timestamp="1598507202086">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1598465464422" />
-    <state width="1493" height="261" key="GridCell.Tab.0.center" timestamp="1598465464422">
+    <state width="1493" height="261" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1598507202086" />
+    <state width="1493" height="261" key="GridCell.Tab.0.center" timestamp="1598507202085">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1598465464422" />
-    <state width="1493" height="261" key="GridCell.Tab.0.left" timestamp="1598465464421">
+    <state width="1493" height="261" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1598507202085" />
+    <state width="1493" height="261" key="GridCell.Tab.0.left" timestamp="1598507202085">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1598465464421" />
-    <state width="1493" height="261" key="GridCell.Tab.0.right" timestamp="1598465464422">
+    <state width="1493" height="261" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1598507202085" />
+    <state width="1493" height="261" key="GridCell.Tab.0.right" timestamp="1598507202086">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1598465464422" />
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1598465464422">
+    <state width="1493" height="261" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1598507202086" />
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1598507202086">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1598465464422" />
-    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1598465464422">
+    <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1598507202086" />
+    <state width="1493" height="261" key="GridCell.Tab.1.center" timestamp="1598507202086">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1598465464422" />
-    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1598465464422">
+    <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1598507202086" />
+    <state width="1493" height="261" key="GridCell.Tab.1.left" timestamp="1598507202086">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1598465464422" />
-    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1598465464422">
+    <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1598507202086" />
+    <state width="1493" height="261" key="GridCell.Tab.1.right" timestamp="1598507202086">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1598465464422" />
+    <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1598507202086" />
     <state x="474" y="168" width="588" height="488" key="find.popup" timestamp="1598460113877">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="474" y="168" width="588" height="488" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1598460113877" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/services/rabbitMq.go</url>
+          <line>14</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

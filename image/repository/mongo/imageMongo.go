@@ -23,16 +23,16 @@ func (m *mongoImageRepository) Store(image *domain.Image) error {
 	return nil
 }
 
-func (m *mongoImageRepository) GetByID(id primitive.ObjectID) (*domain.Image, error) {
+func (m *mongoImageRepository) GetByID(albumId, imgId primitive.ObjectID) (*domain.Image, error) {
 	var image domain.Image
-	result := m.collection.FindOne(context.Background(), bson.M{"_id" : id})
+	result := m.collection.FindOne(context.Background(), bson.M{"_id" : imgId, "album_id": albumId})
 	if err := result.Decode(&image); err != nil {
 		return nil, nil
 	}
 	return &image, nil
 }
 
-func (m *mongoImageRepository) Find(take, skip int) (*[]domain.Image, error) {
+func (m *mongoImageRepository) Find(albumId primitive.ObjectID, take, skip int) (*[]domain.Image, error) {
 	var images []domain.Image
 
 	findOptions := options.FindOptions{}
@@ -41,7 +41,7 @@ func (m *mongoImageRepository) Find(take, skip int) (*[]domain.Image, error) {
 	findOptions.Limit = &limit
 	findOptions.Skip = &s
 	findOptions.SetSort(bson.D{{"_id", -1}})
-	cur, err := m.collection.Find(context.TODO(), bson.M{}, &findOptions)
+	cur, err := m.collection.Find(context.TODO(), bson.M{"album_id": albumId}, &findOptions)
 
 	if err != nil {
 		return nil, nil
@@ -59,16 +59,16 @@ func (m *mongoImageRepository) Find(take, skip int) (*[]domain.Image, error) {
 	return &images, nil
 }
 
-func (m *mongoImageRepository) Remove(id primitive.ObjectID) error {
-	filter := bson.M{"_id": id}
+func (m *mongoImageRepository) Remove(albumId, id primitive.ObjectID) error {
+	filter := bson.M{"_id": id, "album_id": albumId}
 	if _, err := m.collection.DeleteOne(context.Background(), filter); err != nil{
 		return err
 	}
 	return nil
 }
 
-func (m *mongoImageRepository) RemoveMany(ids []primitive.ObjectID) error {
-	filter := bson.M{"_id": bson.M{"$in": ids}}
+func (m *mongoImageRepository) RemoveManyByAlbumId(albumId primitive.ObjectID) error {
+	filter := bson.M{"album_id": albumId}
 	_, err := m.collection.DeleteMany(context.Background(), filter)
 	return err
 }
